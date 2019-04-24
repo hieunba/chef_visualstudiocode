@@ -5,14 +5,21 @@
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
 
-unless os.windows?
-  # This is an example test, replace with your own test.
-  describe user('root'), :skip do
-    it { should exist }
-  end
+return unless os.windows?
+
+describe file('C:\Program Files\Microsoft VS Code\Code.exe') do
+  it { should exist }
 end
 
-# This is an example test, replace it with your own test.
-describe port(80), :skip do
-  it { should_not be_listening }
-end
+describe registry_key({
+  hive: 'HKEY_LOCAL_MACHINE',
+  key: 'SOFTWARe\Microsoft\Windows\CurrentVersion\Uninstall'
+  }).children.each { |key|
+    if registry_key(key)['DisplayName'] =~ /Microsoft Visual Studio Code/
+      describe registry_key(key) do
+        its('DisplayName') { should match(/Microsoft Visual Studio Code/) }
+      end
+    end
+  }
+
+

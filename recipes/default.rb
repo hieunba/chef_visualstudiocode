@@ -15,3 +15,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+windows_package 'Microsoft Visual Studio Code' do
+  source node['visualstudiocode']['source']
+  checksum node['visualstudiocode']['checksum'] if node['visualstudiocode']['checksum']
+  installer_type :custom
+  options '/SILENT'
+  action :install
+end
